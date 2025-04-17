@@ -1,5 +1,4 @@
-# Create a light testing version of topics.json with 3 entries
-light_topics = [
+
     {
         "category": "Healthcare",
         "topic": "Build or upgrade 50 hospitals across Ontario"
@@ -13,10 +12,3 @@ light_topics = [
         "topic": "Expand public transit in the Greater Toronto Area"
     }
 ]
-
-# Save to file
-test_path = "/mnt/data/topics_light.json"
-with open(test_path, "w", encoding="utf-8") as f:
-    json.dump(light_topics, f, indent=2)
-
-test_path

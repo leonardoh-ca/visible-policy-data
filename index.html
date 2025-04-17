@@ -63,7 +63,7 @@
     }
     .dashboard-table {
       display: grid;
-      grid-template-columns: 1.5fr 2fr 1fr 1fr;
+      grid-template-columns: 1.5fr 2fr 1fr 1.5fr;
       gap: 10px;
       font-size: 14px;
     }
@@ -100,7 +100,6 @@
     body.dark #themeToggle::before {
       transform: translateX(33px);
     }
-
     button#refreshBtn {
       margin-left: 20px;
       padding: 6px 12px;
@@ -119,6 +118,12 @@
       font-size: 13px;
       opacity: 0.6;
       margin-top: 6px;
+    }
+    a.source-link {
+      font-size: 12px;
+      display: block;
+      opacity: 0.6;
+      margin-top: 4px;
     }
   </style>
 </head>
@@ -163,11 +168,16 @@
           let statusIcon = "🟡";
           if (item.status === "Completed") statusIcon = "🟢";
           if (item.status === "Delay") statusIcon = "🔴";
+          const updatedBlock = `
+            <div>
+              ${item.updated_at}
+              <a href="${item.source}" class="source-link" target="_blank">🔗 View Source</a>
+            </div>`;
           dashboard.innerHTML += `
             <div>${item.category}</div>
             <div>${item.policy}</div>
             <div>${statusIcon} ${item.status} ${item.percent || 0}%</div>
-            <div>${item.updated_at}</div>
+            ${updatedBlock}
           `;
         });
       } catch (e) {
@@ -175,12 +185,9 @@
       }
     }
 
-    // Initial fetch
     fetchAndRenderDashboard();
-    // Refresh every 30 minutes
     setInterval(fetchAndRenderDashboard, 1000 * 60 * 30);
 
-    // Refresh Now button
     document.getElementById('refreshBtn').addEventListener('click', () => {
       document.getElementById('refreshStatus').textContent = 'Refreshing...';
       fetchAndRenderDashboard().then(() => {
@@ -192,7 +199,6 @@
       });
     });
 
-    // Theme toggle
     const toggle = document.getElementById("themeToggle");
     toggle.addEventListener("click", () => {
       document.body.classList.toggle("dark");

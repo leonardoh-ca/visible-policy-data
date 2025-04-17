@@ -30,14 +30,19 @@ def extract_json_block(text):
 def ask_perplexity(topic):
     try:
         prompt = f"""
-Given the Ontario policy topic: \"{topic}\",
-please return only the following JSON structure:
+You are an assistant tracking Ontario government policy.
+
+Given the policy topic: \"{topic}\", summarize its current implementation status based on current information from credible sources. Respond ONLY in this exact JSON format:
+
 {{
-  \"status\": \"Completed | In Progress | Delay\",
-  \"percent\": 0-100,
-  \"updated_at\": \"YYYY-MM-DD\",
-  \"source\": \"Perplexity Search\"
-}}"""
+  "status": "Completed" | "In Progress" | "Delay",
+  "percent": number (0 to 100),
+  "updated_at": "YYYY-MM-DD",
+  "source": "A short source reference, e.g. Global News, CP24, etc."
+}}
+
+Return ONLY this JSON, nothing else.
+"""
 
         res = requests.post(
             "https://api.perplexity.ai/chat/completions",

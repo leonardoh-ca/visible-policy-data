@@ -38,7 +38,7 @@ Given the policy topic: \"{topic}\", summarize its current implementation status
   "status": "Completed" | "In Progress" | "Delay",
   "percent": number (0 to 100),
   "updated_at": "YYYY-MM-DD",
-  "source": "A short source reference, e.g. Global News, CP24, etc."
+  "source": "a valid URL starting with https:// from a real news site that confirms this policy update"
 }}
 
 Return ONLY this JSON, nothing else.
@@ -76,7 +76,7 @@ def generate_progress():
                 "status": details.get("status", "In Progress"),
                 "percent": details.get("percent", 0),
                 "updated_at": details.get("updated_at", datetime.now().strftime("%Y-%m-%d")),
-                "source": details.get("source", "Perplexity Search")
+                "source": details.get("source", "https://www.ontario.ca/news")
             })
     Path("progress.json").write_text(json.dumps(results, indent=2), encoding="utf-8")
     print(f"✅ {len(results)} entries written to progress.json")

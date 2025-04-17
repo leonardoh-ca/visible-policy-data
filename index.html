@@ -1,211 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Visible Policy · Ontario</title>
   <style>
     body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(20px);
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      transition: background 0.3s, color 0.3s;
-    }
-    :root {
-      --bg: #ffffff;
-      --text: #000000;
-      --glass: rgba(255, 255, 255, 0.6);
-    }
-    body.dark {
-      --bg: #1e1e1e;
-      --text: #ffffff;
-      --glass: rgba(30, 30, 30, 0.5);
-    }
-    .container {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 40px 20px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     h1 {
-      text-align: center;
-      font-weight: 600;
-      font-size: 2.5rem;
-      margin-bottom: 30px;
+      font-size: 2rem;
+      margin-bottom: 1rem;
     }
-    .tabs {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    .tabs button {
-      background: transparent;
-      border: none;
-      font-size: 16px;
-      margin: 0 15px;
-      cursor: pointer;
-      padding: 10px;
-      border-bottom: 2px solid transparent;
-    }
-    .tabs button:hover {
-      border-color: currentColor;
-    }
-    .module {
-      background: var(--glass);
-      backdrop-filter: blur(20px);
-      border-radius: 16px;
-      padding: 30px;
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.05);
-    }
-    .module-title {
-      font-size: 20px;
-      font-weight: 500;
-      margin-bottom: 16px;
-    }
-    .dashboard-table {
-      display: grid;
-      grid-template-columns: 1.5fr 2fr 1fr 1.5fr;
-      gap: 10px;
-      font-size: 14px;
-    }
-    .dashboard-table div {
-      padding: 10px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    .dashboard-table .header {
-      font-weight: bold;
-      border-bottom: 2px solid currentColor;
-    }
-    #themeToggle {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      width: 60px;
-      height: 30px;
-      border-radius: 15px;
-      background: var(--glass);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.2);
-      cursor: pointer;
-    }
-    #themeToggle::before {
-      content: '';
-      display: block;
-      width: 24px;
-      height: 24px;
-      background: var(--text);
-      border-radius: 50%;
-      transform: translateX(3px);
-      transition: transform 0.3s ease;
-    }
-    body.dark #themeToggle::before {
-      transform: translateX(33px);
-    }
-    button#refreshBtn {
-      margin-left: 20px;
-      padding: 6px 12px;
-      font-size: 14px;
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(200,200,200,0.2);
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      max-width: 900px;
+      background: white;
       border-radius: 12px;
-      color: inherit;
-      cursor: pointer;
-      transition: all 0.2s ease-in-out;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
     }
-    button#refreshBtn:hover {
-      background: rgba(255,255,255,0.2);
+    th, td {
+      padding: 1rem;
+      border-bottom: 1px solid #eee;
+      text-align: left;
     }
-    .refresh-message {
-      font-size: 13px;
-      opacity: 0.6;
-      margin-top: 6px;
-    }
-    a.source-link {
-      font-size: 12px;
-      display: block;
-      opacity: 0.6;
-      margin-top: 4px;
+    th {
+      background: #f6f6f6;
     }
   </style>
 </head>
 <body>
-  <div id="themeToggle"></div>
-  <div class="container">
-    <h1>Visible Policy · Ontario</h1>
-    <div class="tabs">
-      <button>Home</button>
-      <button>Progress</button>
-      <button>AskGov</button>
-      <button>About</button>
-    </div>
-    <div class="module">
-      <div class="module-title">
-        📊 Progress Dashboard
-        <button id="refreshBtn">🔁 Refresh Now</button>
-      </div>
-      <div id="refreshStatus" class="refresh-message"></div>
-      <div class="dashboard-table" id="dashboard">
-        <div class="header">Category</div>
-        <div class="header">Specific Policy</div>
-        <div class="header">Current Status</div>
-        <div class="header">Last Updated</div>
-      </div>
-    </div>
-  </div>
+  <h1>📊 Progress Dashboard</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Specific Policy</th>
+        <th>Status (%)</th>
+        <th>Last Updated</th>
+        <th>Source</th>
+      </tr>
+    </thead>
+    <tbody id="dashboard-body">
+      <tr><td colspan="5">Loading...</td></tr>
+    </tbody>
+  </table>
   <script>
-    const dashboard = document.getElementById("dashboard");
-
-    async function fetchAndRenderDashboard() {
-      try {
-        const res = await fetch("progress.json");
-        const data = await res.json();
-        dashboard.innerHTML = `
-          <div class="header">Category</div>
-          <div class="header">Specific Policy</div>
-          <div class="header">Current Status</div>
-          <div class="header">Last Updated</div>
-        `;
-        data.forEach(item => {
-          let statusIcon = "🟡";
-          if (item.status === "Completed") statusIcon = "🟢";
-          if (item.status === "Delay") statusIcon = "🔴";
-          const updatedBlock = `
-            <div>
-              ${item.updated_at}
-              <a href="${item.source}" class="source-link" target="_blank">🔗 View Source</a>
-            </div>`;
-          dashboard.innerHTML += `
-            <div>${item.category}</div>
-            <div>${item.policy}</div>
-            <div>${statusIcon} ${item.status} ${item.percent || 0}%</div>
-            ${updatedBlock}
+    fetch('progress.json')
+      .then(res => res.json())
+      .then(data => {
+        const body = document.getElementById('dashboard-body');
+        body.innerHTML = '';
+        data.forEach(entry => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${entry.category}</td>
+            <td>${entry.policy}</td>
+            <td>${entry.status} (${entry.percent}%)</td>
+            <td>${entry.updated_at}</td>
+            <td><a href="${entry.source}" target="_blank">Source</a></td>
           `;
+          body.appendChild(row);
         });
-      } catch (e) {
-        dashboard.innerHTML = "<div>Failed to load data</div>";
-      }
-    }
-
-    fetchAndRenderDashboard();
-    setInterval(fetchAndRenderDashboard, 1000 * 60 * 30);
-
-    document.getElementById('refreshBtn').addEventListener('click', () => {
-      document.getElementById('refreshStatus').textContent = 'Refreshing...';
-      fetchAndRenderDashboard().then(() => {
-        document.getElementById('refreshStatus').textContent =
-          'Updated at ' + new Date().toLocaleTimeString();
-        setTimeout(() => {
-          document.getElementById('refreshStatus').textContent = '';
-        }, 4000);
+      })
+      .catch(err => {
+        document.getElementById('dashboard-body').innerHTML = `<tr><td colspan="5">Failed to load data.</td></tr>`;
       });
-    });
-
-    const toggle = document.getElementById("themeToggle");
-    toggle.addEventListener("click", () => {
-      document.body.classList.toggle("dark");
-    });
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      document.body.classList.add("dark");
-    }
   </script>
 </body>
 </html>

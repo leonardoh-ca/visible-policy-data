@@ -1,18 +1,10 @@
 [
   {
-    "category": "Healthcare",
-    "policy": "Build or upgrade 50 hospitals across Ontario",
+    "category": "Transportation",
+    "policy": "Expand public transit in the Greater Toronto Area",
     "status": "In Progress",
-    "percent": 0,
+    "percent": 40,
     "updated_at": "2025-04-16",
-    "source": "Ontario Government News"
-  },
-  {
-    "category": "Education",
-    "policy": "Build 30 new schools and 15 school expansions",
-    "status": "In Progress",
-    "percent": 0,
-    "updated_at": "2025-01-27",
-    "source": "Ontario Government News, REMI Network"
+    "source": "https://secure.toronto.ca/council/agenda-item.do?item=2025.TTC3.6"
   }
 ]

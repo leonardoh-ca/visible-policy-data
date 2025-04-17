@@ -1,14 +1,14 @@
-
-    {
-        "category": "Healthcare",
-        "topic": "Build or upgrade 50 hospitals across Ontario"
-    },
-    {
-        "category": "Education",
-        "topic": "Build 30 new schools and 15 school expansions"
-    },
-    {
-        "category": "Transportation",
-        "topic": "Expand public transit in the Greater Toronto Area"
-    }
+[
+  {
+    "category": "Healthcare",
+    "topic": "Build or upgrade 50 hospitals across Ontario"
+  },
+  {
+    "category": "Education",
+    "topic": "Build 30 new schools and 15 school expansions"
+  },
+  {
+    "category": "Transportation",
+    "topic": "Expand public transit in the Greater Toronto Area"
+  }
 ]

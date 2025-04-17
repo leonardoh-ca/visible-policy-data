@@ -5,8 +5,11 @@ from datetime import datetime
 from pathlib import Path
 import requests
 import re
+from dotenv import load_dotenv
 
-PERPLEXITY_API_KEY = os.getenv("PERPLEXITY_API_KEY", "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")
+load_dotenv()
+
+PERPLEXITY_API_KEY = os.getenv("PERPLEXITY_API_KEY")
 
 TOPICS = [
     "Ontario healthcare hospital construction and long-term care",

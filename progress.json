@@ -1,11 +1,1 @@
-[
-  {
-    "category": "Healthcare",
-    "topic": "Hospital construction and LTC homes",
-    "status": "...",         // ← 后端填
-    "percent": 0,            // ← 后端填
-    "updated_at": "...",     // ← 后端填
-    "source": "..."          // ← 后端填
-  },
-  ...
-]
+

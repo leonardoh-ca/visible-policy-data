@@ -1,35 +1,33 @@
-name: Auto Update Progress JSON
+name: Update progress.json
 
 on:
   schedule:
-    - cron: '*/30 * * * *'  # 每30分钟执行一次
-  workflow_dispatch:       # 支持手动触发
+    - cron: "0 3 * * 1"  # 每周一凌晨 3 点 UTC 执行
+  workflow_dispatch:
 
 jobs:
-  update-json:
+  update:
     runs-on: ubuntu-latest
-
+    env:
+      PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: "3.11"
 
-      - name: Install dependencies (if needed)
-        run: |
-          pip install -r requirements.txt || echo 'no requirements'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
-      - name: Run fetch_policies.py
-        run: |
-          python fetch_policies.py
+      - name: Run fetch script
+        run: python fetch_policies.py
 
-      - name: Commit & Push JSON Update
+      - name: Commit and push changes
         run: |
           git config user.name "github-actions"
-          git config user.email "actions@github.com"
+          git config user.email "github-actions@github.com"
           git add progress.json
           git commit -m "🤖 Auto update progress.json" || echo "No changes to commit"
           git push

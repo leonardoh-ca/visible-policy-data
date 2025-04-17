@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>📊 Progress Dashboard · Visible Policy Ontario</title>
+  <title>Visible Policy · Ontario</title>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto;
@@ -30,6 +30,24 @@
     h1 {
       font-size: 2rem;
       margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    nav {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      font-weight: 500;
+      font-size: 1.1rem;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
     }
 
     .toggle-switch {
@@ -110,7 +128,14 @@
 </head>
 <body>
   <div class="container">
-    <h1>📊 Progress Dashboard</h1>
+    <h1>Visible Policy · Ontario</h1>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Progress</a>
+      <a href="#">AskGov</a>
+      <a href="#">About</a>
+    </nav>
+
     <div class="toggle-switch">
       <label class="switch">
         <input type="checkbox" id="mode-toggle">
@@ -156,7 +181,7 @@
             <td>${entry.policy}</td>
             <td class="status ${statusClass}">${entry.status} (${entry.percent}%)</td>
             <td>${entry.updated_at}</td>
-            <td><a href="${entry.source}" target="_blank">Source</a></td>
+            <td>${entry.source}</td>
           `;
           body.appendChild(row);
         });

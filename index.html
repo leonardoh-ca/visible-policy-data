@@ -175,13 +175,20 @@
           const statusClass = entry.status.toLowerCase().includes('complete') ? 'completed'
                             : entry.status.toLowerCase().includes('progress') ? 'inprogress'
                             : 'delayed';
+
+          // Auto-detect if source is a URL or text
+          const isURL = entry.source.startsWith('http');
+          const sourceHTML = isURL
+            ? `<a href="${entry.source}" target="_blank">Link</a>`
+            : entry.source;
+
           const row = document.createElement('tr');
           row.innerHTML = `
             <td>${entry.category}</td>
             <td>${entry.policy}</td>
             <td class="status ${statusClass}">${entry.status} (${entry.percent}%)</td>
             <td>${entry.updated_at}</td>
-            <td>${entry.source}</td>
+            <td>${sourceHTML}</td>
           `;
           body.appendChild(row);
         });

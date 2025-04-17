@@ -22,7 +22,7 @@ def fetch_ontario_newsroom():
             "policy": title,
             "status": "In Progress",
             "percent": 10,
-            "updated_at": f"{date} (Scraped)",
+            "updated_at": date,
             "source": link
         })
     return data
@@ -46,7 +46,7 @@ def fetch_canada_newsroom():
             "policy": title,
             "status": "In Progress",
             "percent": 5,
-            "updated_at": f"{date_text} (Scraped)",
+            "updated_at": date_text,
             "source": link
         })
     return data

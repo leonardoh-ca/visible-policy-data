@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "category": "Healthcare",
+    "policy": "Build or upgrade 50 hospitals across Ontario",
+    "status": "In Progress",
+    "percent": 0,
+    "updated_at": "2025-04-16",
+    "source": "Ontario Government News"
+  },
+  {
+    "category": "Education",
+    "policy": "Build 30 new schools and 15 school expansions",
+    "status": "In Progress",
+    "percent": 0,
+    "updated_at": "2025-01-27",
+    "source": "Ontario Government News, REMI Network"
+  }
+]

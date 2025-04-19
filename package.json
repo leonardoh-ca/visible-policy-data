@@ -1,0 +1,6 @@
+{
+  "name": "visible-policy-data",
+  "dependencies": {
+    "@octokit/core": "^5.0.0"
+  }
+}

@@ -161,8 +161,12 @@
 
     async function fetchComments() {
       const res = await fetch(`https://raw.githubusercontent.com/${owner}/${repo}/main/${filePath}`);
-      const data = await res.json();
-      return data;
+      const text = await res.text();
+      try {
+        return JSON.parse(text);
+      } catch (e) {
+        return [];
+      }
     }
 
     async function sendToGitHubAction(tweetList) {
@@ -203,7 +207,9 @@
         time: new Date().toLocaleString()
       };
       tweets.unshift(tweet);
-      sendToGitHubAction(tweets).then(renderTweets);
+      sendToGitHubAction(tweets).then(() => {
+        renderTweets();
+      });
 
       document.getElementById("name").value = "";
       document.getElementById("district").value = "";
@@ -212,7 +218,9 @@
 
     function deleteTweet(id) {
       tweets = tweets.filter(t => t.id !== id);
-      sendToGitHubAction(tweets).then(renderTweets);
+      sendToGitHubAction(tweets).then(() => {
+        renderTweets();
+      });
     }
 
     function renderTweets() {

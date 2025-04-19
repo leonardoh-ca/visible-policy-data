@@ -1,99 +1,192 @@
-<!-- askgov.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AskGov Message Board</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-dN/xmSKdEOWHZtQZm8z0HICqOvX9qWj/x4DRL3TrWbXQ9vM9XB3jWy4xIh5lPqM2eqzD6oP7vv2VZFL6xVjxYw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AskGov · Visible Policy</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto;
+      margin: 0;
+      padding: 2rem;
+      background-color: var(--bg);
+      color: var(--text);
+      transition: all 0.3s ease-in-out;
+    }
+    :root {
+      --bg: #f9f9f9;
+      --text: #000;
+      --card: rgba(255, 255, 255, 0.85);
+      --btn-bg: #1da1f2;
+    }
+    .dark {
+      --bg: #121212;
+      --text: #f9f9f9;
+      --card: rgba(30, 30, 30, 0.85);
+      --btn-bg: #1a8cd8;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .tweet-box, .tweet {
+      background: var(--card);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      padding: 1rem;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      transition: all 0.2s ease-in-out;
+    }
+    .tweet-box:hover, .tweet:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+    .tweet-box input, .tweet-box textarea {
+      width: 100%;
+      padding: 0.8rem;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+      border-radius: 12px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    .post-container {
+      display: flex;
+      justify-content: flex-end;
+    }
+    .tweet-box button {
+      background-color: var(--btn-bg);
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 9999px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .tweet-box button:hover {
+      background-color: #0d8ce0;
+    }
+    .tweet {
+      position: relative;
+      padding-right: 2.5rem;
+    }
+    .tweet .meta {
+      font-weight: bold;
+      font-size: 0.95rem;
+      margin-bottom: 0.3rem;
+    }
+    .tweet .time {
+      font-size: 0.8rem;
+      color: #888;
+    }
+    .tweet .text {
+      font-size: 1rem;
+      margin: 0.5rem 0;
+    }
+    .tweet .delete-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      color: #e0245e;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+    .back-button {
+      margin-bottom: 1rem;
+      display: inline-block;
+      text-decoration: none;
+      color: #1da1f2;
+      font-weight: bold;
+      font-size: 1rem;
+    }
+    .back-button i {
+      margin-right: 6px;
+    }
+    .toggle-container {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 min-h-screen p-4">
-  <div class="max-w-xl mx-auto">
-    <h1 class="text-2xl font-bold mb-4 text-center">AskGov Message Board</h1>
-
-    <!-- Input Form -->
-    <div class="bg-white rounded-2xl shadow p-4 mb-6">
-      <input id="name" type="text" placeholder="Your Name" class="w-full p-2 border-b outline-none" />
-      <input id="district" type="text" placeholder="Your Electoral District" class="w-full p-2 border-b mt-2 outline-none" />
-      <textarea id="message" placeholder="Write your question here..." class="w-full p-2 mt-2 border outline-none resize-none"></textarea>
-      <div class="flex justify-end mt-4">
-        <button onclick="postMessage()" class="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition">Post</button>
+<body>
+  <div class="toggle-container">
+    <label class="switch">
+      <input type="checkbox" id="modeToggle" onchange="toggleMode()">
+      <span class="slider round"></span>
+    </label>
+  </div>
+  <div class="container">
+    <a class="back-button" href="index.html"><i class="fas fa-chevron-left"></i> Back</a>
+    <div class="tweet-box">
+      <input type="text" id="name" placeholder="Name" />
+      <input type="text" id="district" placeholder="District / Riding" />
+      <textarea id="question" rows="3" placeholder="What's happening?"></textarea>
+      <div class="post-container">
+        <button onclick="postTweet()"><i class="fas fa-feather-alt"></i> Post</button>
       </div>
     </div>
-
-    <!-- Message Board -->
-    <div id="messageBoard"></div>
+    <div id="tweets"></div>
   </div>
 
   <script>
-    let posts = [];
+    const tweets = JSON.parse(localStorage.getItem("askgov") || "[]");
+    const tweetsContainer = document.getElementById("tweets");
 
-    function postMessage() {
+    function postTweet() {
       const name = document.getElementById("name").value.trim();
       const district = document.getElementById("district").value.trim();
-      const message = document.getElementById("message").value.trim();
+      const question = document.getElementById("question").value.trim();
+      if (!name || !district || !question) return;
 
-      if (!name || !district || !message) {
-        alert("Please fill in all fields.");
-        return;
+      const tweet = {
+        id: Date.now(),
+        name,
+        district,
+        question,
+        time: new Date().toLocaleString()
+      };
+      tweets.unshift(tweet);
+      localStorage.setItem("askgov", JSON.stringify(tweets));
+      renderTweets();
+      document.getElementById("name").value = "";
+      document.getElementById("district").value = "";
+      document.getElementById("question").value = "";
+    }
+
+    function deleteTweet(id) {
+      const index = tweets.findIndex(t => t.id === id);
+      if (index !== -1) {
+        tweets.splice(index, 1);
+        localStorage.setItem("askgov", JSON.stringify(tweets));
+        renderTweets();
       }
-
-      const timestamp = new Date().toLocaleString();
-      const id = Date.now();
-      const post = { id, name, district, message, timestamp };
-      posts.unshift(post);
-      renderMessages();
-      document.getElementById("message").value = "";
     }
 
-    function deleteMessage(id) {
-      posts = posts.filter(post => post.id !== id);
-      renderMessages();
+    function renderTweets() {
+      tweetsContainer.innerHTML = tweets.map(t => `
+        <div class="tweet">
+          <button class="delete-btn" onclick="deleteTweet(${t.id})"><i class="fas fa-trash"></i></button>
+          <div class="meta">${t.name} · ${t.district}</div>
+          <div class="time">${t.time}</div>
+          <div class="text">${t.question}</div>
+        </div>
+      `).join('');
     }
 
-    function renderMessages() {
-      const container = document.getElementById("messageBoard");
-      container.innerHTML = "";
-
-      posts.forEach(post => {
-        const postDiv = document.createElement("div");
-        postDiv.className = "bg-white rounded-2xl shadow p-4 mb-4 relative";
-
-        const headerDiv = document.createElement("div");
-        headerDiv.className = "flex justify-between items-start w-full";
-
-        const infoDiv = document.createElement("div");
-        const namePara = document.createElement("p");
-        namePara.className = "font-semibold";
-        namePara.textContent = `@${post.name}`;
-
-        const detailsPara = document.createElement("p");
-        detailsPara.className = "text-sm text-gray-500";
-        detailsPara.textContent = `${post.district} • ${post.timestamp}`;
-
-        infoDiv.appendChild(namePara);
-        infoDiv.appendChild(detailsPara);
-
-        const deleteBtn = document.createElement("button");
-        deleteBtn.className = "text-gray-400 hover:text-red-600 text-xl ml-4 mt-1";
-        deleteBtn.setAttribute("aria-label", "Delete message");
-        deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
-        deleteBtn.onclick = () => deleteMessage(post.id);
-
-        headerDiv.appendChild(infoDiv);
-        headerDiv.appendChild(deleteBtn);
-
-        const msgPara = document.createElement("p");
-        msgPara.className = "mt-2 text-gray-700";
-        msgPara.textContent = post.message;
-
-        postDiv.appendChild(headerDiv);
-        postDiv.appendChild(msgPara);
-
-        container.appendChild(postDiv);
-      });
+    function toggleMode() {
+      document.body.classList.toggle("dark");
     }
+
+    renderTweets();
   </script>
 </body>
 </html>

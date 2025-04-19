@@ -177,8 +177,45 @@
   </div>
 
   <script>
-    const tweets = JSON.parse(localStorage.getItem("askgov") || "[]");
+    const repo = "visible-policy-data";
+    const owner = "leonardoh-ca";
+    const filePath = "comments.json";
+    const token = "YOUR_GITHUB_TOKEN"; // replace this at runtime with secret
+
+    async function fetchComments() {
+      const res = await fetch(`https://raw.githubusercontent.com/${owner}/${repo}/main/${filePath}`);
+      const data = await res.json();
+      return data;
+    }
+
+    async function saveComments(comments) {
+      const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`, {
+        method: "PUT",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: "Update comments",
+          content: btoa(unescape(encodeURIComponent(JSON.stringify(comments, null, 2)))),
+          sha: window.lastSha || undefined,
+        })
+      });
+      const result = await res.json();
+      window.lastSha = result.content?.sha;
+    }
+
+    function toggleMode() {
+      document.body.classList.toggle("dark");
+    }
+
+    let tweets = [];
     const tweetsContainer = document.getElementById("tweets");
+
+    async function load() {
+      tweets = await fetchComments();
+      renderTweets();
+    }
 
     function postTweet() {
       const name = document.getElementById("name").value.trim();
@@ -194,20 +231,16 @@
         time: new Date().toLocaleString()
       };
       tweets.unshift(tweet);
-      localStorage.setItem("askgov", JSON.stringify(tweets));
-      renderTweets();
+      saveComments(tweets).then(renderTweets);
+
       document.getElementById("name").value = "";
       document.getElementById("district").value = "";
       document.getElementById("question").value = "";
     }
 
     function deleteTweet(id) {
-      const index = tweets.findIndex(t => t.id === id);
-      if (index !== -1) {
-        tweets.splice(index, 1);
-        localStorage.setItem("askgov", JSON.stringify(tweets));
-        renderTweets();
-      }
+      tweets = tweets.filter(t => t.id !== id);
+      saveComments(tweets).then(renderTweets);
     }
 
     function renderTweets() {
@@ -221,11 +254,7 @@
       `).join('');
     }
 
-    function toggleMode() {
-      document.body.classList.toggle("dark");
-    }
-
-    renderTweets();
+    load();
   </script>
 </body>
 </html>

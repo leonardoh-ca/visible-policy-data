@@ -61,7 +61,7 @@
         postDiv.className = "bg-white rounded-2xl shadow p-4 mb-4 relative";
 
         const headerDiv = document.createElement("div");
-        headerDiv.className = "flex justify-between items-start";
+        headerDiv.className = "flex justify-between items-start w-full";
 
         const infoDiv = document.createElement("div");
         const namePara = document.createElement("p");
@@ -76,7 +76,8 @@
         infoDiv.appendChild(detailsPara);
 
         const deleteBtn = document.createElement("button");
-        deleteBtn.className = "text-gray-400 hover:text-red-600 text-xl";
+        deleteBtn.className = "text-gray-400 hover:text-red-600 text-xl ml-4 mt-1";
+        deleteBtn.setAttribute("aria-label", "Delete message");
         deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
         deleteBtn.onclick = () => deleteMessage(post.id);
 

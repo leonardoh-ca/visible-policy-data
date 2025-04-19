@@ -163,8 +163,10 @@
       const res = await fetch(`https://raw.githubusercontent.com/${owner}/${repo}/main/${filePath}`);
       const text = await res.text();
       try {
-        return JSON.parse(text).filter(t => t.id && t.name);
+        const parsed = JSON.parse(text);
+        return parsed.filter(t => t && t.id && t.name && t.question);
       } catch (e) {
+        console.error("Failed to parse comments:", e);
         return [];
       }
     }
@@ -202,8 +204,9 @@
         name,
         district,
         question,
-        time: new Date().toLocaleString()
+        time: new Date().toISOString().slice(0, 16).replace("T", " ")
       };
+
       tweets.unshift(tweet);
       sendToGitHubAction(tweets).then(() => renderTweets());
 

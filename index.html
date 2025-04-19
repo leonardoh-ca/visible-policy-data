@@ -3,89 +3,108 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Visible Policy · Ontario</title>
+  <title>AskGov · Visible Policy</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
+    :root {
+      --bg: #f9f9f9;
+      --text: #000;
+      --card: rgba(255, 255, 255, 0.85);
+      --btn-bg: #1da1f2;
+    }
+    .dark {
+      --bg: #121212;
+      --text: #f9f9f9;
+      --card: rgba(30, 30, 30, 0.85);
+      --btn-bg: #1a8cd8;
+    }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto;
       margin: 0;
-      padding: 0;
-      background-color: #ffffff;
-      color: #000000;
-      transition: background-color 0.3s, color 0.3s;
-    }
-
-    body.dark {
-      background-color: #1c1c1e;
-      color: #f5f5f7;
-    }
-
-    .container {
-      max-width: 1000px;
-      margin: 0 auto;
       padding: 2rem;
+      background-color: var(--bg);
+      color: var(--text);
+      transition: all 0.3s ease-in-out;
     }
-
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-      text-align: center;
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
     }
-
-    nav {
+    .tweet-box, .tweet {
+      background: var(--card);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      padding: 1rem;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      transition: all 0.2s ease-in-out;
+    }
+    .tweet-box input, .tweet-box textarea {
+      width: 100%;
+      padding: 0.8rem;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+      border-radius: 12px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    .post-container {
       display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-      font-weight: 500;
-      font-size: 1.1rem;
+      justify-content: flex-end;
     }
-
-    nav a {
-      text-decoration: none;
-      color: inherit;
-      transition: color 0.3s ease, transform 0.2s ease;
+    .tweet-box button {
+      background-color: var(--btn-bg);
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 9999px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
     }
-
-    nav a:hover {
-      text-decoration: underline;
-      color: #0a84ff;
-      transform: scale(1.05);
+    .tweet {
+      position: relative;
+      padding-right: 2.5rem;
     }
-
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem 0 2rem;
+    .tweet .meta {
+      font-weight: bold;
+      font-size: 0.95rem;
+      margin-bottom: 0.3rem;
     }
-
-    .topbar h1 {
-      flex-grow: 1;
-      text-align: center;
+    .tweet .time {
+      font-size: 0.8rem;
+      color: #888;
     }
-
-    .toggle-switch {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+    .tweet .text {
+      font-size: 1rem;
+      margin: 0.5rem 0;
+    }
+    .tweet .delete-btn {
       position: absolute;
-      top: 1rem;
-      right: 2rem;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      color: #e0245e;
+      font-size: 1.2rem;
+      cursor: pointer;
     }
-
+    .toggle-container {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+    }
     .switch {
       position: relative;
       display: inline-block;
-      width: 50px;
+      width: 52px;
       height: 28px;
     }
-
     .switch input {
       opacity: 0;
       width: 0;
       height: 0;
     }
-
     .slider {
       position: absolute;
       cursor: pointer;
@@ -97,7 +116,6 @@
       transition: 0.4s;
       border-radius: 34px;
     }
-
     .slider:before {
       position: absolute;
       content: "";
@@ -109,135 +127,111 @@
       transition: 0.4s;
       border-radius: 50%;
     }
-
     input:checked + .slider {
-      background-color: #0a84ff;
+      background-color: #1da1f2;
     }
-
     input:checked + .slider:before {
-      transform: translateX(22px);
+      transform: translateX(24px);
     }
-
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      background-color: rgba(255, 255, 255, 0.9);
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-      transition: background-color 0.3s ease;
-    }
-
-    body.dark table {
-      background-color: rgba(44, 44, 46, 0.85);
-    }
-
-    th, td {
-      padding: 1rem;
-      border-bottom: 1px solid #ddd;
-      text-align: left;
-      transition: background-color 0.3s, color 0.3s;
-    }
-
-    th {
-      background: #f4f4f4;
-    }
-
-    body.dark th {
-      background: #2c2c2e;
-    }
-
-    tr:hover {
-      background-color: rgba(240, 240, 255, 0.3);
-    }
-
-    body.dark tr:hover {
-      background-color: rgba(255, 255, 255, 0.05);
-    }
-
-    .status.inprogress { color: #e6b800; font-weight: bold; }
-    .status.completed  { color: #00cc66; font-weight: bold; }
-    .status.delayed    { color: #e60000; font-weight: bold; }
   </style>
 </head>
 <body>
-  <div class="topbar">
-    <h1>Visible Policy · Ontario</h1>
-    <div class="toggle-switch">
-      <label class="switch">
-        <input type="checkbox" id="mode-toggle">
-        <span class="slider"></span>
-      </label>
-    </div>
+  <div class="toggle-container">
+    <label class="switch">
+      <input type="checkbox" onchange="toggleMode()">
+      <span class="slider"></span>
+    </label>
   </div>
-
-  <nav>
-    <a href="#">Home</a>
-    <a href="#">Progress</a>
-    <a href="askgov.html">AskGov</a>
-    <a href="about.html">About</a>
-  </nav>
-
   <div class="container">
-    <h2>📊 Progress Dashboard</h2>
-
-    <table>
-      <thead>
-        <tr>
-          <th>📂 Category</th>
-          <th>📌 Specific Policy</th>
-          <th>📈 Status</th>
-          <th>🕒 Last Updated</th>
-          <th>🔗 Source</th>
-        </tr>
-      </thead>
-      <tbody id="dashboard-body">
-        <tr><td colspan="5">Loading...</td></tr>
-      </tbody>
-    </table>
+    <h1>📣 AskGov · Ontario</h1>
+    <div class="tweet-box">
+      <input type="text" id="name" placeholder="Your Name" required>
+      <input type="text" id="district" placeholder="Your Riding / District" required>
+      <textarea id="question" rows="3" placeholder="What is your question?" required></textarea>
+      <div class="post-container">
+        <button onclick="postTweet()">Post</button>
+      </div>
+    </div>
+    <div id="tweets"></div>
   </div>
-
   <script>
-    const modeToggle = document.getElementById('mode-toggle');
-    modeToggle.addEventListener('change', () => {
-      document.body.classList.toggle('dark');
-    });
+    const repo = "visible-policy-data";
+    const owner = "leonardoh-ca";
+    const filePath = "comments.json";
 
-    fetch('progress.json')
-      .then(res => res.json())
-      .then(data => {
-        const body = document.getElementById('dashboard-body');
-        body.innerHTML = '';
-        data.forEach(entry => {
-          let statusText = entry.status;
-          const lower = statusText.toLowerCase();
-          if (lower.includes('progress')) statusText = `🟡 In Progress (${entry.percent}%)`;
-          else if (lower.includes('complete')) statusText = `🟢 Completed (${entry.percent}%)`;
-          else statusText = `🔴 Delay (${entry.percent}%)`;
+    async function fetchComments() {
+      const res = await fetch(`https://raw.githubusercontent.com/${owner}/${repo}/main/${filePath}`);
+      const text = await res.text();
+      try {
+        const parsed = JSON.parse(text);
+        return parsed.filter(t => t && t.id && t.name && t.question);
+      } catch (e) {
+        console.error("Failed to parse comments:", e);
+        return [];
+      }
+    }
 
-          const statusClass = lower.includes('complete') ? 'completed'
-                              : lower.includes('progress') ? 'inprogress'
-                              : 'delayed';
-
-          const isURL = entry.source.startsWith('http');
-          const sourceHTML = isURL
-            ? `<a href="${entry.source}" target="_blank">Link</a>`
-            : entry.source;
-
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${entry.category}</td>
-            <td>${entry.policy}</td>
-            <td class="status ${statusClass}">${statusText}</td>
-            <td>${entry.updated_at}</td>
-            <td>${sourceHTML}</td>
-          `;
-          body.appendChild(row);
-        });
-      })
-      .catch(() => {
-        document.getElementById('dashboard-body').innerHTML = `<tr><td colspan="5">Failed to load data.</td></tr>`;
+    async function sendToGitHubAction(tweetList) {
+      await fetch("/.netlify/functions/postComment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ data: tweetList })
       });
+    }
+
+    function toggleMode() {
+      document.body.classList.toggle("dark");
+    }
+
+    let tweets = [];
+    const tweetsContainer = document.getElementById("tweets");
+
+    async function load() {
+      tweets = await fetchComments();
+      renderTweets();
+    }
+
+    function postTweet() {
+      const name = document.getElementById("name").value.trim();
+      const district = document.getElementById("district").value.trim();
+      const question = document.getElementById("question").value.trim();
+      if (!name || !district || !question) return;
+
+      const tweet = {
+        id: Date.now(),
+        name,
+        district,
+        question,
+        time: new Date().toISOString().slice(0, 16).replace("T", " ")
+      };
+
+      tweets.unshift(tweet);
+      sendToGitHubAction(tweets).then(() => renderTweets());
+
+      document.getElementById("name").value = "";
+      document.getElementById("district").value = "";
+      document.getElementById("question").value = "";
+    }
+
+    function deleteTweet(id) {
+      tweets = tweets.filter(t => t.id !== id);
+      sendToGitHubAction(tweets).then(() => renderTweets());
+    }
+
+    function renderTweets() {
+      tweetsContainer.innerHTML = tweets.map(t => `
+        <div class="tweet">
+          <button class="delete-btn" onclick="deleteTweet(${t.id})"><i class="fas fa-trash"></i></button>
+          <div class="meta">${t.name} · ${t.district}</div>
+          <div class="time">${t.time}</div>
+          <div class="text">${t.question}</div>
+        </div>
+      `).join('');
+    }
+
+    load();
   </script>
 </body>
 </html>

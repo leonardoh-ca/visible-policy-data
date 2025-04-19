@@ -163,7 +163,7 @@
       const res = await fetch(`https://raw.githubusercontent.com/${owner}/${repo}/main/${filePath}`);
       const text = await res.text();
       try {
-        return JSON.parse(text);
+        return JSON.parse(text).filter(t => t.id && t.name);
       } catch (e) {
         return [];
       }
@@ -175,9 +175,7 @@
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          data: tweetList
-        })
+        body: JSON.stringify({ data: tweetList })
       });
     }
 
@@ -207,9 +205,7 @@
         time: new Date().toLocaleString()
       };
       tweets.unshift(tweet);
-      sendToGitHubAction(tweets).then(() => {
-        renderTweets();
-      });
+      sendToGitHubAction(tweets).then(() => renderTweets());
 
       document.getElementById("name").value = "";
       document.getElementById("district").value = "";
@@ -218,9 +214,7 @@
 
     function deleteTweet(id) {
       tweets = tweets.filter(t => t.id !== id);
-      sendToGitHubAction(tweets).then(() => {
-        renderTweets();
-      });
+      sendToGitHubAction(tweets).then(() => renderTweets());
     }
 
     function renderTweets() {

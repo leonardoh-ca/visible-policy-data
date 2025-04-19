@@ -1,260 +1,80 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AskGov · Visible Policy</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <style>
-    :root {
-      --bg: #f9f9f9;
-      --text: #000;
-      --card: rgba(255, 255, 255, 0.85);
-      --btn-bg: #1da1f2;
-    }
-    .dark {
-      --bg: #121212;
-      --text: #f9f9f9;
-      --card: rgba(30, 30, 30, 0.85);
-      --btn-bg: #1a8cd8;
-    }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto;
-      margin: 0;
-      padding: 2rem;
-      background-color: var(--bg);
-      color: var(--text);
-      transition: all 0.3s ease-in-out;
-    }
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-    }
-    .tweet-box, .tweet {
-      background: var(--card);
-      backdrop-filter: blur(12px);
-      border-radius: 20px;
-      padding: 1rem;
-      margin-bottom: 1.2rem;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-      transition: all 0.2s ease-in-out;
-    }
-    .tweet-box:hover, .tweet:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-    }
-    .tweet-box input, .tweet-box textarea {
-      width: 100%;
-      padding: 0.8rem;
-      margin-bottom: 0.5rem;
-      font-size: 1rem;
-      border-radius: 12px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-    }
-    .post-container {
-      display: flex;
-      justify-content: flex-end;
-    }
-    .tweet-box button {
-      background-color: var(--btn-bg);
-      color: white;
-      border: none;
-      padding: 0.6rem 1.2rem;
-      border-radius: 9999px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .tweet-box button:hover {
-      background-color: #0d8ce0;
-    }
-    .tweet {
-      position: relative;
-      padding-right: 2.5rem;
-    }
-    .tweet .meta {
-      font-weight: bold;
-      font-size: 0.95rem;
-      margin-bottom: 0.3rem;
-    }
-    .tweet .time {
-      font-size: 0.8rem;
-      color: #888;
-    }
-    .tweet .text {
-      font-size: 1rem;
-      margin: 0.5rem 0;
-    }
-    .tweet .delete-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: none;
-      border: none;
-      color: #e0245e;
-      font-size: 1.2rem;
-      cursor: pointer;
-    }
-    .back-button {
-      margin-bottom: 1rem;
-      display: inline-block;
-      text-decoration: none;
-      color: #1da1f2;
-      font-weight: bold;
-      font-size: 1rem;
-    }
-    .back-button i {
-      margin-right: 6px;
-    }
-    .toggle-container {
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-    }
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 52px;
-      height: 28px;
-    }
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      transition: 0.4s;
-      border-radius: 34px;
-    }
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 20px;
-      width: 20px;
-      left: 4px;
-      bottom: 4px;
-      background-color: white;
-      transition: 0.4s;
-      border-radius: 50%;
-    }
-    input:checked + .slider {
-      background-color: #1da1f2;
-    }
-    input:checked + .slider:before {
-      transform: translateX(24px);
-    }
-  </style>
-</head>
-<body>
-  <div class="toggle-container">
-    <label class="switch">
-      <input type="checkbox" id="modeToggle" onchange="toggleMode()">
-      <span class="slider"></span>
-    </label>
-  </div>
-  <div class="container">
-    <a class="back-button" href="index.html"><i class="fas fa-chevron-left"></i> Back</a>
-    <div class="tweet-box">
-      <input type="text" id="name" placeholder="Name" />
-      <input type="text" id="district" placeholder="District / Riding" />
-      <textarea id="question" rows="3" placeholder="What's happening?"></textarea>
-      <div class="post-container">
-        <button onclick="postTweet()"><i class="fas fa-feather-alt"></i> Post</button>
-      </div>
+<script>
+const repo = "visible-policy-data";
+const owner = "leonardoh-ca";
+const filePath = "comments.json";
+
+async function fetchComments() {
+  const res = await fetch(`https://raw.githubusercontent.com/${owner}/${repo}/main/${filePath}`);
+  const data = await res.json();
+  return data;
+}
+
+async function sendToGitHubAction(tweetList) {
+  await fetch(`https://api.github.com/repos/${owner}/${repo}/dispatches`, {
+    method: "POST",
+    headers: {
+      "Authorization": "Bearer YOUR_PERSONAL_ACCESS_TOKEN",
+      "Accept": "application/vnd.github+json",
+      "X-GitHub-Api-Version": "2022-11-28",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      event_type: "update-comments",
+      client_payload: {
+        data: JSON.stringify(tweetList, null, 2)
+      }
+    })
+  });
+}
+
+function toggleMode() {
+  document.body.classList.toggle("dark");
+}
+
+let tweets = [];
+const tweetsContainer = document.getElementById("tweets");
+
+async function load() {
+  tweets = await fetchComments();
+  renderTweets();
+}
+
+function postTweet() {
+  const name = document.getElementById("name").value.trim();
+  const district = document.getElementById("district").value.trim();
+  const question = document.getElementById("question").value.trim();
+  if (!name || !district || !question) return;
+
+  const tweet = {
+    id: Date.now(),
+    name,
+    district,
+    question,
+    time: new Date().toLocaleString()
+  };
+  tweets.unshift(tweet);
+  sendToGitHubAction(tweets).then(renderTweets);
+
+  document.getElementById("name").value = "";
+  document.getElementById("district").value = "";
+  document.getElementById("question").value = "";
+}
+
+function deleteTweet(id) {
+  tweets = tweets.filter(t => t.id !== id);
+  sendToGitHubAction(tweets).then(renderTweets);
+}
+
+function renderTweets() {
+  tweetsContainer.innerHTML = tweets.map(t => `
+    <div class="tweet">
+      <button class="delete-btn" onclick="deleteTweet(${t.id})"><i class="fas fa-trash"></i></button>
+      <div class="meta">${t.name} · ${t.district}</div>
+      <div class="time">${t.time}</div>
+      <div class="text">${t.question}</div>
     </div>
-    <div id="tweets"></div>
-  </div>
+  `).join('');
+}
 
-  <script>
-    const repo = "visible-policy-data";
-    const owner = "leonardoh-ca";
-    const filePath = "comments.json";
-    const token = "YOUR_GITHUB_TOKEN"; // replace this at runtime with secret
-
-    async function fetchComments() {
-      const res = await fetch(`https://raw.githubusercontent.com/${owner}/${repo}/main/${filePath}`);
-      const data = await res.json();
-      return data;
-    }
-
-    async function saveComments(comments) {
-      const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`, {
-        method: "PUT",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message: "Update comments",
-          content: btoa(unescape(encodeURIComponent(JSON.stringify(comments, null, 2)))),
-          sha: window.lastSha || undefined,
-        })
-      });
-      const result = await res.json();
-      window.lastSha = result.content?.sha;
-    }
-
-    function toggleMode() {
-      document.body.classList.toggle("dark");
-    }
-
-    let tweets = [];
-    const tweetsContainer = document.getElementById("tweets");
-
-    async function load() {
-      tweets = await fetchComments();
-      renderTweets();
-    }
-
-    function postTweet() {
-      const name = document.getElementById("name").value.trim();
-      const district = document.getElementById("district").value.trim();
-      const question = document.getElementById("question").value.trim();
-      if (!name || !district || !question) return;
-
-      const tweet = {
-        id: Date.now(),
-        name,
-        district,
-        question,
-        time: new Date().toLocaleString()
-      };
-      tweets.unshift(tweet);
-      saveComments(tweets).then(renderTweets);
-
-      document.getElementById("name").value = "";
-      document.getElementById("district").value = "";
-      document.getElementById("question").value = "";
-    }
-
-    function deleteTweet(id) {
-      tweets = tweets.filter(t => t.id !== id);
-      saveComments(tweets).then(renderTweets);
-    }
-
-    function renderTweets() {
-      tweetsContainer.innerHTML = tweets.map(t => `
-        <div class="tweet">
-          <button class="delete-btn" onclick="deleteTweet(${t.id})"><i class="fas fa-trash"></i></button>
-          <div class="meta">${t.name} · ${t.district}</div>
-          <div class="time">${t.time}</div>
-          <div class="text">${t.question}</div>
-        </div>
-      `).join('');
-    }
-
-    load();
-  </script>
-</body>
-</html>
+load();
+</script>

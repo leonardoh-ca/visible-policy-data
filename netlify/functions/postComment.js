@@ -1,40 +1,39 @@
-const { Octokit } = require("@octokit/core");
+// netlify/functions/write-comment.js
+const { Octokit } = require("@octokit/rest");
 
-exports.handler = async function(event) {
+exports.handler = async (event) => {
+  const body = JSON.parse(event.body || "{}");
   const token = process.env.ASKGOV_GITHUB_TOKEN;
-  const octokit = new Octokit({ auth: token });
-
   const owner = "leonardoh-ca";
   const repo = "visible-policy-data";
   const path = "comments.json";
 
-  const body = JSON.parse(event.body || "{}");
-  const newContent = body.data;
+  const octokit = new Octokit({ auth: token });
 
   try {
-    const { data: { sha } } = await octokit.request("GET /repos/{owner}/{repo}/contents/{path}", {
-      owner,
-      repo,
-      path
-    });
-
-    await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
+    const { data: existingFile } = await octokit.repos.getContent({
       owner,
       repo,
       path,
-      message: "Update comments.json via AskGov",
-      content: Buffer.from(newContent).toString("base64"),
-      sha
+    });
+
+    const res = await octokit.repos.createOrUpdateFileContents({
+      owner,
+      repo,
+      path,
+      message: `📝 Update comments.json`,
+      content: Buffer.from(body.data).toString("base64"),
+      sha: existingFile.sha,
     });
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ success: true })
+      body: JSON.stringify({ success: true, url: res.data.content.html_url }),
     };
-  } catch (err) {
+  } catch (error) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: err.message })
+      body: JSON.stringify({ error: error.message }),
     };
   }
 };

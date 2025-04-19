@@ -1,0 +1,26 @@
+name: Update AskGov Comments
+
+on:
+  repository_dispatch:
+    types: [update-comments]
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Update comments.json
+        run: |
+          echo "${{ github.event.client_payload.data }}" > comments.json
+
+      - name: Commit and Push
+        run: |
+          git config user.name "AskGov Bot"
+          git config user.email "askgov@visible.policy"
+          git add comments.json
+          git commit -m "📝 Update comments from user submission"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.ASKGOV_GITHUB_TOKEN }}

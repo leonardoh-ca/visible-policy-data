@@ -1,0 +1,98 @@
+<!-- askgov.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AskGov Message Board</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-dN/xmSKdEOWHZtQZm8z0HICqOvX9qWj/x4DRL3TrWbXQ9vM9XB3jWy4xIh5lPqM2eqzD6oP7vv2VZFL6xVjxYw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body class="bg-gray-100 min-h-screen p-4">
+  <div class="max-w-xl mx-auto">
+    <h1 class="text-2xl font-bold mb-4 text-center">AskGov Message Board</h1>
+
+    <!-- Input Form -->
+    <div class="bg-white rounded-2xl shadow p-4 mb-6">
+      <input id="name" type="text" placeholder="Your Name" class="w-full p-2 border-b outline-none" />
+      <input id="district" type="text" placeholder="Your Electoral District" class="w-full p-2 border-b mt-2 outline-none" />
+      <textarea id="message" placeholder="Write your question here..." class="w-full p-2 mt-2 border outline-none resize-none"></textarea>
+      <div class="flex justify-end mt-4">
+        <button onclick="postMessage()" class="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition">Post</button>
+      </div>
+    </div>
+
+    <!-- Message Board -->
+    <div id="messageBoard"></div>
+  </div>
+
+  <script>
+    let posts = [];
+
+    function postMessage() {
+      const name = document.getElementById("name").value.trim();
+      const district = document.getElementById("district").value.trim();
+      const message = document.getElementById("message").value.trim();
+
+      if (!name || !district || !message) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      const timestamp = new Date().toLocaleString();
+      const id = Date.now();
+      const post = { id, name, district, message, timestamp };
+      posts.unshift(post);
+      renderMessages();
+      document.getElementById("message").value = "";
+    }
+
+    function deleteMessage(id) {
+      posts = posts.filter(post => post.id !== id);
+      renderMessages();
+    }
+
+    function renderMessages() {
+      const container = document.getElementById("messageBoard");
+      container.innerHTML = "";
+
+      posts.forEach(post => {
+        const postDiv = document.createElement("div");
+        postDiv.className = "bg-white rounded-2xl shadow p-4 mb-4 relative";
+
+        const headerDiv = document.createElement("div");
+        headerDiv.className = "flex justify-between items-start";
+
+        const infoDiv = document.createElement("div");
+        const namePara = document.createElement("p");
+        namePara.className = "font-semibold";
+        namePara.textContent = `@${post.name}`;
+
+        const detailsPara = document.createElement("p");
+        detailsPara.className = "text-sm text-gray-500";
+        detailsPara.textContent = `${post.district} • ${post.timestamp}`;
+
+        infoDiv.appendChild(namePara);
+        infoDiv.appendChild(detailsPara);
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.className = "text-gray-400 hover:text-red-600 text-xl";
+        deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+        deleteBtn.onclick = () => deleteMessage(post.id);
+
+        headerDiv.appendChild(infoDiv);
+        headerDiv.appendChild(deleteBtn);
+
+        const msgPara = document.createElement("p");
+        msgPara.className = "mt-2 text-gray-700";
+        msgPara.textContent = post.message;
+
+        postDiv.appendChild(headerDiv);
+        postDiv.appendChild(msgPara);
+
+        container.appendChild(postDiv);
+      });
+    }
+  </script>
+</body>
+</html>

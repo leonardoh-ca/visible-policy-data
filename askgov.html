@@ -170,13 +170,13 @@
     }
 
     async function sendToGitHubAction(tweetList) {
-      await fetch("/.netlify/functions/write-comment", {
+      await fetch("/.netlify/functions/postComment", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          data: JSON.stringify(tweetList, null, 2)
+          data: tweetList
         })
       });
     }

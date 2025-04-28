@@ -1,18 +1,10 @@
 [
   {
-    "category": "Healthcare",
-    "policy": "Build or upgrade 50 hospitals across Ontario",
+    "category": "Transportation",
+    "policy": "Expand public transit in the Greater Toronto Area",
     "status": "In Progress",
-    "percent": 60,
-    "updated_at": "2025-03-28",
-    "source": "https://news.ontario.ca/en/release/1005710/ontario-breaks-ground-on-peel-memorial-hospital-expansion"
-  },
-  {
-    "category": "Education",
-    "policy": "Build 30 new schools and 15 school expansions",
-    "status": "In Progress",
-    "percent": 25,
-    "updated_at": "2025-01-31",
-    "source": "https://news.ontario.ca/en/release/1005655/ontario-making-historic-13-billion-investment-to-build-and-expand-more-schools"
+    "percent": 65,
+    "updated_at": "2025-04-16",
+    "source": "https://www.toronto.ca/services-payments/streets-parking-transportation/transit-in-toronto/transit-expansion/"
   }
 ]

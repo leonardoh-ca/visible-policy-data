@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "category": "Transportation",
+    "policy": "Expand public transit in the Greater Toronto Area",
+    "status": "In Progress",
+    "percent": 60,
+    "updated_at": "2025-04-09",
+    "source": "https://www.masstransitmag.com/rail/infrastructure/press-release/55280865/infrastructure-ontario-government-of-ontario-breaks-ground-on-final-tunnel-segment-of-eglinton-crosstown-west-extension"
+  }
+]

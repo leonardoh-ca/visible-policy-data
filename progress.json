@@ -1,10 +1,18 @@
 [
   {
+    "category": "Healthcare",
+    "policy": "Build or upgrade 50 hospitals across Ontario",
+    "status": "In Progress",
+    "percent": 0,
+    "updated_at": "2025-05-16",
+    "source": "https://budget.ontario.ca/2025/chapter-1b-services.html"
+  },
+  {
     "category": "Transportation",
     "policy": "Expand public transit in the Greater Toronto Area",
     "status": "In Progress",
-    "percent": 60,
-    "updated_at": "2025-04-09",
-    "source": "https://www.masstransitmag.com/rail/infrastructure/press-release/55280865/infrastructure-ontario-government-of-ontario-breaks-ground-on-final-tunnel-segment-of-eglinton-crosstown-west-extension"
+    "percent": 40,
+    "updated_at": "2025-05-16",
+    "source": "https://stevemunro.ca/2025/05/15/ontarios-2025-budget-and-transit/"
   }
 ]

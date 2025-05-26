@@ -4,15 +4,15 @@
     "policy": "Build or upgrade 50 hospitals across Ontario",
     "status": "In Progress",
     "percent": 0,
-    "updated_at": "2025-05-16",
-    "source": "https://budget.ontario.ca/2025/chapter-1b-services.html"
+    "updated_at": "2025-05-23",
+    "source": "https://news.ontario.ca/en/release/1005942/ontario-building-new-hospital-in-orillia"
   },
   {
-    "category": "Transportation",
-    "policy": "Expand public transit in the Greater Toronto Area",
+    "category": "Education",
+    "policy": "Build 30 new schools and 15 school expansions",
     "status": "In Progress",
-    "percent": 40,
-    "updated_at": "2025-05-16",
-    "source": "https://stevemunro.ca/2025/05/15/ontarios-2025-budget-and-transit/"
+    "percent": 0,
+    "updated_at": "2025-05-15",
+    "source": "https://www.reminetwork.com/articles/ontario-new-schools-building/"
   }
 ]

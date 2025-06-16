@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "category": "Education",
+    "policy": "Build 30 new schools and 15 school expansions",
+    "status": "In Progress",
+    "percent": 30,
+    "updated_at": "2025-06-16",
+    "source": "https://news.ontario.ca/en/release/1005655/ontario-making-historic-13-billion-investment-to-build-and-expand-more-schools"
+  }
+]

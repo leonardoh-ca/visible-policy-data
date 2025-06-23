@@ -1,10 +1,26 @@
 [
   {
+    "category": "Healthcare",
+    "policy": "Build or upgrade 50 hospitals across Ontario",
+    "status": "In Progress",
+    "percent": 60,
+    "updated_at": "2025-05-23",
+    "source": "https://news.ontario.ca/en/release/1005942/ontario-building-new-hospital-in-orillia"
+  },
+  {
     "category": "Education",
     "policy": "Build 30 new schools and 15 school expansions",
     "status": "In Progress",
-    "percent": 30,
-    "updated_at": "2025-06-16",
+    "percent": 40,
+    "updated_at": "2025-06-23",
     "source": "https://news.ontario.ca/en/release/1005655/ontario-making-historic-13-billion-investment-to-build-and-expand-more-schools"
+  },
+  {
+    "category": "Transportation",
+    "policy": "Expand public transit in the Greater Toronto Area",
+    "status": "In Progress",
+    "percent": 40,
+    "updated_at": "2025-06-17",
+    "source": "https://news.ontario.ca/en/release/1006056/ontario-breaks-ground-on-east-harbour-transit-hub"
   }
 ]

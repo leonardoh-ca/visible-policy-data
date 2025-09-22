@@ -4,15 +4,15 @@
     "policy": "Build or upgrade 50 hospitals across Ontario",
     "status": "In Progress",
     "percent": 40,
-    "updated_at": "2025-07-17",
-    "source": "https://link2build.ca/news/articles/2025/may/ontario-building-new-soldiers-memorial-hospital-in-orillia/"
+    "updated_at": "2025-09-22",
+    "source": "https://www.renewcanada.net/ontario-building-a-new-hospital-in-northumberland-county/"
   },
   {
     "category": "Education",
     "policy": "Build 30 new schools and 15 school expansions",
     "status": "In Progress",
-    "percent": 25,
-    "updated_at": "2025-01-28",
+    "percent": 40,
+    "updated_at": "2025-09-22",
     "source": "https://sydenhamcurrent.ca/2025/01/28/investments-made-to-build-30-new-schools-and-undergo-15-school-expansions-across-ontario/"
   },
   {
@@ -20,7 +20,7 @@
     "policy": "Expand public transit in the Greater Toronto Area",
     "status": "In Progress",
     "percent": 35,
-    "updated_at": "2025-09-15",
-    "source": "https://www.metrolinx.com/en/projects-and-programs/go-expansion"
+    "updated_at": "2025-09-22",
+    "source": "https://www.metrolinx.com/en/discover/2025-the-year-of-digging-for-the-ontario-line"
   }
 ]
